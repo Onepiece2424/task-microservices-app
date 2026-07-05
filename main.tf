@@ -11,7 +11,7 @@ resource "aws_vpc" "main" {
   }
 }
 
-resource "aws_subnet" "public-subnet-elb-1a" {
+resource "aws_subnet" "public_subnet_elb_1a" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.1.0/24"
   availability_zone = "ap-northeast-1a"
@@ -65,7 +65,7 @@ resource "aws_eip" "nat" {
 
 resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.nat.id
-  subnet_id     = aws_subnet.public-subnet-elb-1a.id
+  subnet_id     = aws_subnet.public_subnet_elb_1a.id
 
   tags = {
     Name = "nat-gw-${var.env}"
@@ -100,7 +100,7 @@ resource "aws_route_table" "private" {
 }
 
 resource "aws_route_table_association" "public_a" {
-  subnet_id      = aws_subnet.public-subnet-elb-1a.id
+  subnet_id      = aws_subnet.public_subnet_elb_1a.id
   route_table_id = aws_route_table.public.id
 }
 
@@ -138,7 +138,7 @@ data "aws_ami" "ubuntu" {
 resource "aws_instance" "bastion_server" {
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = "t3.micro"
-  subnet_id                   = aws_subnet.public-subnet-elb-1a.id
+  subnet_id                   = aws_subnet.public_subnet_elb_1a.id
   associate_public_ip_address = true # パブリックIP付与
   vpc_security_group_ids      = [aws_security_group.public_sg.id]
   key_name                    = aws_key_pair.ssh_key.key_name
