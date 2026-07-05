@@ -3,3 +3,7 @@ variable "env" {
   type        = string
   default     = "dev"
 }
+
+variable "my_ip" {
+  type = string
+}
